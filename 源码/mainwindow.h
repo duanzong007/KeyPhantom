@@ -6,11 +6,14 @@
 #include <QTimer>
 #include <atomic>
 
+#ifdef Q_OS_MAC
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-/* ====================== 后台发送线程 (Windows) ====================== */
 class KeySenderThread : public QThread
 {
     Q_OBJECT
@@ -33,10 +36,19 @@ protected:
 private:
     void sendUnicode(QChar ch);
 
+#ifdef Q_OS_MAC
+    void sendEnter();
+    void sendTab();
+    void sendKeycode(uint16_t kc);
+#endif
+
     QString          text_;
     Speed            speed_ = Normal;
     std::atomic_bool stop_{false};
-    void             sendVk(unsigned short vk);
+
+#ifdef Q_OS_WIN
+    void sendVk(unsigned short vk);
+#endif
 };
 
 /* ============================= 主窗口 ============================== */
@@ -61,5 +73,11 @@ private:
     Ui::MainWindow *ui;
     KeySenderThread sender_;
     QTimer          delayTimer_;
+
+#ifdef Q_OS_MAC
+    bool checkMacPermissions();
+#endif
+
 };
+
 #endif // MAINWINDOW_H
