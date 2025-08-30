@@ -1,14 +1,20 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QtPlugin>
-Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
-Q_IMPORT_PLUGIN(QICOPlugin)
 
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon("C:/zhantie/keyphantom_logo.ico"));
+
+#ifdef Q_OS_MAC
+    a.setWindowIcon(QIcon(":/keyphantom_logo.icns"));
+#endif
+
+#ifdef Q_OS_WIN
+    a.setWindowIcon(QIcon(":/keyphantom_logo.ico"));
+#endif
+
     MainWindow w;
     w.show();
     return a.exec();
