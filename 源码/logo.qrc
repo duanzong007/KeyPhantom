@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>keyphantom_logo.icns</file>
+        <file>keyphantom_logo.ico</file>
+    </qresource>
+</RCC>
