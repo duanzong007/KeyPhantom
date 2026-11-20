@@ -1,53 +1,16 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
+#include "globalstophotkey.h"
+#include "keysenderthread.h"
+
+#include <QElapsedTimer>
 #include <QMainWindow>
-#include <QThread>
 #include <QTimer>
-#include <atomic>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class KeySenderThread : public QThread
-{
-    Q_OBJECT
-public:
-    enum Speed { Slow = 0, Normal, Fast, Ultra };
-
-    explicit KeySenderThread(QObject *p = nullptr) : QThread(p) {}
-
-    void configure(const QString &txt, Speed spd)
-    { text_ = txt; speed_ = spd; stop_.store(false); }
-
-    void requestStop() { stop_.store(true); }
-
-signals:
-    void finished(bool byUserStop);
-
-protected:
-    void run() override;
-
-private:
-    void sendUnicode(QChar ch);
-    void sendEnter();
-    void sendTab();
-
-#ifdef Q_OS_MAC
-    void sendKeycode(uint16_t kc);
-#endif
-
-    QString          text_;
-    Speed            speed_ = Normal;
-    std::atomic_bool stop_{false};
-
-#ifdef Q_OS_WIN
-    void sendVk(unsigned short vk);
-#endif
-};
-
-/* ============================= 主窗口 ============================== */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -55,25 +18,42 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
-private slots:
-    void onMainBtnClicked();   // 单一按钮
-    void beginAfterDelay();    // 3 秒后启动
-    void onSendFinished(bool byUserStop);
+protected:
+    void closeEvent(QCloseEvent *event) override;
 
 private:
-    enum State { Idle, Waiting, Sending };
-    State                 state_ = Idle;
-
-    KeySenderThread::Speed currentSpeed() const;
+    friend class MainWindowTest;
+    enum State { Idle, Countdown, Sending, Paused, Stopping };
+    InputOptions currentOptions() const;
+    void restoreSettings();
+    void saveSettings() const;
+    void refreshPlan();
+    void refreshPermission();
+    void updateControls();
+    void setState(State state);
+    void setMessage(const QString &message, bool error = false);
+    void startOrResume();
+    void beginCountdown(bool resume);
+    void tickCountdown();
+    void pauseSending();
+    void stopSending();
+    void sendingFinished();
+    void updateProgress(qsizetype sent, qsizetype total, qint64 remainingMs);
+    static QString duration(qint64 milliseconds);
 
     Ui::MainWindow *ui;
     KeySenderThread sender_;
-    QTimer          delayTimer_;
-
-#ifdef Q_OS_MAC
-    bool checkMacPermissions();
-#endif
-
+    GlobalStopHotkey stopHotkey_;
+    QTimer countdownTimer_;
+    QTimer permissionTimer_;
+    QTimer previewTimer_;
+    QElapsedTimer countdownClock_;
+    InputPlan previewPlan_;
+    InputPlan jobPlan_;
+    InputOptions jobOptions_;
+    State state_ = Idle;
+    int countdownMs_ = 3000;
+    bool resuming_ = false;
+    bool permissionGranted_ = false;
+    bool activationPause_ = false;
 };
-
-#endif // MAINWINDOW_H

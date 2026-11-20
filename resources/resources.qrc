@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
+        <file>style.qss</file>
+        <file>icons/chevron-down.svg</file>
+        <file>icons/chevron-up.svg</file>
         <file alias="keyphantom_logo.icns">icons/keyphantom_logo.icns</file>
         <file alias="keyphantom_logo.ico">icons/keyphantom_logo.ico</file>
     </qresource>

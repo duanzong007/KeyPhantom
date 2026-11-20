@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(KeyPhantom VERSION 1.1.1 LANGUAGES CXX)
+project(KeyPhantom VERSION 1.2.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+if(MSVC)
+    add_compile_options(/utf-8)
+endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
@@ -20,6 +23,16 @@ qt_add_executable(KeyPhantom
     src/main.cpp
     src/mainwindow.cpp
     src/mainwindow.h
+    src/appearance.cpp
+    src/appearance.h
+    src/inputplan.cpp
+    src/inputplan.h
+    src/keysenderthread.cpp
+    src/keysenderthread.h
+    src/platforminput.cpp
+    src/platforminput.h
+    src/globalstophotkey.cpp
+    src/globalstophotkey.h
     ui/mainwindow.ui
     resources/resources.qrc
 )
@@ -61,3 +74,40 @@ install(TARGETS KeyPhantom
     BUNDLE DESTINATION .
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
 )
+
+option(KEYPHANTOM_BUILD_TESTS "Build input and window regression tests" OFF)
+if(KEYPHANTOM_BUILD_TESTS)
+    enable_testing()
+    find_package(Qt6 6.2 REQUIRED COMPONENTS Test)
+    qt_add_executable(input_test
+        tests/input_test.cpp
+        src/inputplan.cpp
+        src/keysenderthread.cpp
+        src/platforminput.cpp
+    )
+    target_include_directories(input_test PRIVATE src)
+    target_link_libraries(input_test PRIVATE Qt6::Test)
+    qt_add_executable(window_test
+        tests/window_test.cpp
+        src/mainwindow.cpp
+        src/inputplan.cpp
+        src/keysenderthread.cpp
+        src/platforminput.cpp
+        src/globalstophotkey.cpp
+        src/appearance.cpp
+        ui/mainwindow.ui
+        resources/resources.qrc
+    )
+    target_include_directories(window_test PRIVATE src)
+    target_link_libraries(window_test PRIVATE Qt6::Test Qt6::Widgets)
+    foreach(test_target input_test window_test)
+        if(WIN32)
+            target_link_libraries(${test_target} PRIVATE user32)
+        elseif(APPLE)
+            target_link_libraries(${test_target} PRIVATE
+                "${APPLICATION_SERVICES_FRAMEWORK}" "${CARBON_FRAMEWORK}")
+        endif()
+        add_test(NAME ${test_target} COMMAND ${test_target})
+    endforeach()
+    set_tests_properties(window_test PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+endif()

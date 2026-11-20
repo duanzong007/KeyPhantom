@@ -2,154 +2,102 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>键影</string>
-  </property>
+  <property name="geometry"><rect><x>0</x><y>0</y><width>760</width><height>640</height></rect></property>
+  <property name="minimumSize"><size><width>620</width><height>500</height></size></property>
+  <property name="windowTitle"><string>键影 · KeyPhantom</string></property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QPlainTextEdit" name="plainTextEdit"/>
-    </item>
-    <item>
-     <widget class="QWidget" name="widget" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>40</height>
-       </size>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="minimumSize">
-          <size>
-           <width>40</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>40</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>速度：</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox">
-         <property name="minimumSize">
-          <size>
-           <width>70</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>70</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>289</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="minimumSize">
-          <size>
-           <width>110</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>110</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>粘贴</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>289</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QWidget" name="widget_2" native="true">
-         <property name="minimumSize">
-          <size>
-           <width>110</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>110</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
+   <layout class="QVBoxLayout" name="mainLayout" stretch="0,1">
+    <property name="spacing"><number>24</number></property>
+    <property name="leftMargin"><number>28</number></property><property name="topMargin"><number>24</number></property><property name="rightMargin"><number>28</number></property><property name="bottomMargin"><number>28</number></property>
+    <item><layout class="QHBoxLayout" name="headerLayout">
+     <property name="spacing"><number>12</number></property>
+     <item><widget class="QLabel" name="titleLabel"><property name="text"><string>键影</string></property></widget></item>
+     <item><widget class="QLabel" name="appNameLabel"><property name="text"><string>KeyPhantom</string></property></widget></item>
+     <item><spacer name="headerSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint"><size><width>40</width><height>20</height></size></property></spacer></item>
+     <item><widget class="QPushButton" name="settingsButton"><property name="text"><string>设置</string></property></widget></item>
+    </layout></item>
+    <item><widget class="QStackedWidget" name="pageStack">
+     <widget class="QWidget" name="homePage">
+      <layout class="QVBoxLayout" name="homeLayout" stretch="1,0,0,0,0">
+       <property name="spacing"><number>14</number></property>
+       <property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property><property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+       <item><widget class="QPlainTextEdit" name="textEdit"><property name="minimumSize"><size><width>0</width><height>160</height></size></property><property name="placeholderText"><string>在这里粘贴或输入文字…
+
+开始后，在倒计时内切换到目标输入框。</string></property><property name="tabChangesFocus"><bool>false</bool></property></widget></item>
+       <item><layout class="QHBoxLayout" name="editorMetaLayout">
+        <item><widget class="QLabel" name="countLabel"><property name="text"><string>0 字符</string></property></widget></item>
+        <item><spacer name="editorMetaSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint"><size><width>40</width><height>20</height></size></property></spacer></item>
+        <item><widget class="QLabel" name="estimateLabel"><property name="text"><string>预计用时 —</string></property></widget></item>
+       </layout></item>
+       <item><widget class="QWidget" name="progressGroup">
+        <layout class="QVBoxLayout" name="progressLayout">
+         <property name="spacing"><number>8</number></property><property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property><property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+         <item><layout class="QHBoxLayout" name="progressHeadingLayout">
+          <item><widget class="QLabel" name="stateLabel"><property name="text"><string>准备就绪</string></property></widget></item>
+          <item><spacer name="progressHeadingSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint"><size><width>40</width><height>20</height></size></property></spacer></item>
+          <item><widget class="QLabel" name="progressLabel"><property name="text"><string>0 / 0 字符</string></property></widget></item>
+         </layout></item>
+         <item><widget class="QProgressBar" name="progressBar"><property name="value"><number>0</number></property><property name="textVisible"><bool>false</bool></property></widget></item>
+         <item><widget class="QLabel" name="remainingLabel"><property name="alignment"><set>Qt::AlignRight|Qt::AlignVCenter</set></property><property name="text"><string>预计剩余 —</string></property></widget></item>
+        </layout>
+       </widget></item>
+       <item><widget class="QLabel" name="messageLabel"><property name="wordWrap"><bool>true</bool></property><property name="text"><string/></property></widget></item>
+       <item><layout class="QHBoxLayout" name="footerLayout" stretch="0,1"><property name="spacing"><number>10</number></property>
+        <item><widget class="QPushButton" name="stopButton"><property name="maximumSize"><size><width>120</width><height>16777215</height></size></property><property name="text"><string>停止</string></property></widget></item>
+        <item><widget class="QPushButton" name="startButton"><property name="text"><string>开始输入</string></property><property name="default"><bool>true</bool></property></widget></item>
+       </layout></item>
       </layout>
      </widget>
-    </item>
+     <widget class="QWidget" name="settingsPage">
+      <layout class="QVBoxLayout" name="settingsPageLayout">
+       <property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property><property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+       <item><widget class="QScrollArea" name="settingsScroll"><property name="frameShape"><enum>QFrame::NoFrame</enum></property><property name="widgetResizable"><bool>true</bool></property>
+        <widget class="QWidget" name="settingsContent">
+         <layout class="QVBoxLayout" name="settingsContentLayout">
+          <property name="spacing"><number>24</number></property><property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property><property name="rightMargin"><number>8</number></property><property name="bottomMargin"><number>8</number></property>
+          <item><widget class="QWidget" name="settingsCard">
+           <layout class="QVBoxLayout" name="inputSettingsLayout">
+            <property name="spacing"><number>16</number></property><property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property><property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+            <item><widget class="QLabel" name="inputHeading"><property name="text"><string>输入</string></property></widget></item>
+            <item><layout class="QFormLayout" name="inputSettingsForm">
+             <property name="verticalSpacing"><number>14</number></property><property name="fieldGrowthPolicy"><enum>QFormLayout::AllNonFixedFieldsGrow</enum></property>
+             <item row="0" column="0"><widget class="QLabel" name="speedLabel"><property name="text"><string>输入速度</string></property><property name="buddy"><cstring>speedCombo</cstring></property></widget></item>
+             <item row="0" column="1"><widget class="QComboBox" name="speedCombo"/></item>
+             <item row="1" column="0"><widget class="QLabel" name="delayLabel"><property name="text"><string>切换窗口时间</string></property><property name="buddy"><cstring>delaySpin</cstring></property></widget></item>
+             <item row="1" column="1"><widget class="QSpinBox" name="delaySpin"><property name="suffix"><string> 秒</string></property><property name="minimum"><number>1</number></property><property name="maximum"><number>30</number></property><property name="value"><number>3</number></property></widget></item>
+             <item row="2" column="0"><widget class="QLabel" name="newlineLabel"><property name="text"><string>换行方式</string></property><property name="buddy"><cstring>newlineCombo</cstring></property></widget></item>
+             <item row="2" column="1"><widget class="QComboBox" name="newlineCombo"/></item>
+             <item row="3" column="0"><widget class="QLabel" name="tabLabel"><property name="text"><string>Tab 处理</string></property><property name="buddy"><cstring>tabCombo</cstring></property></widget></item>
+             <item row="3" column="1"><widget class="QComboBox" name="tabCombo"/></item>
+             <item row="4" column="0"><widget class="QLabel" name="tabWidthLabel"><property name="text"><string>替换空格数</string></property><property name="buddy"><cstring>tabWidthSpin</cstring></property></widget></item>
+             <item row="4" column="1"><widget class="QSpinBox" name="tabWidthSpin"><property name="minimum"><number>1</number></property><property name="maximum"><number>8</number></property><property name="value"><number>4</number></property></widget></item>
+            </layout></item>
+            <item><widget class="QLabel" name="strategyHint"><property name="wordWrap"><bool>true</bool></property><property name="text"><string>Enter 可能提交内容，Tab 可能切换焦点，请按目标应用选择。</string></property></widget></item>
+           </layout>
+          </widget></item>
+          <item><widget class="QFrame" name="settingsSeparator"><property name="frameShape"><enum>QFrame::HLine</enum></property></widget></item>
+          <item><layout class="QVBoxLayout" name="reminderLayout"><property name="spacing"><number>12</number></property>
+           <item><widget class="QLabel" name="reminderHeading"><property name="text"><string>提醒与快捷键</string></property></widget></item>
+           <item><widget class="QCheckBox" name="notifyCheck"><property name="text"><string>输入完成时提醒我</string></property><property name="toolTip"><string>完成后提醒 Dock 或任务栏，不弹出对话框。</string></property></widget></item>
+           <item><widget class="QLabel" name="hotkeyLabel"><property name="text"><string>全局停止：Ctrl + Alt + F8</string></property></widget></item>
+          </layout></item>
+          <item><widget class="QFrame" name="permissionSeparator"><property name="frameShape"><enum>QFrame::HLine</enum></property></widget></item>
+          <item><layout class="QVBoxLayout" name="permissionLayout"><property name="spacing"><number>12</number></property>
+           <item><widget class="QLabel" name="permissionHeading"><property name="text"><string>系统权限</string></property></widget></item>
+           <item><widget class="QLabel" name="permissionStatusLabel"><property name="wordWrap"><bool>true</bool></property><property name="text"><string>正在检查权限…</string></property></widget></item>
+           <item><widget class="QPushButton" name="permissionButton"><property name="text"><string>开启辅助功能</string></property></widget></item>
+          </layout></item>
+          <item><spacer name="settingsBottomSpacer"><property name="orientation"><enum>Qt::Vertical</enum></property><property name="sizeHint"><size><width>20</width><height>20</height></size></property></spacer></item>
+         </layout>
+        </widget>
+       </widget></item>
+      </layout>
+     </widget>
+    </widget></item>
    </layout>
   </widget>
  </widget>
+ <tabstops><tabstop>textEdit</tabstop><tabstop>startButton</tabstop><tabstop>stopButton</tabstop><tabstop>settingsButton</tabstop><tabstop>speedCombo</tabstop><tabstop>delaySpin</tabstop><tabstop>newlineCombo</tabstop><tabstop>tabCombo</tabstop><tabstop>tabWidthSpin</tabstop><tabstop>notifyCheck</tabstop><tabstop>permissionButton</tabstop></tabstops>
  <resources/>
  <connections/>
 </ui>
