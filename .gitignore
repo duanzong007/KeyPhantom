@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# Qt Creator local settings
+*.pro.user*
+*.pro.shared*
+.qtcreator/
+
+# Build directories and generated files
+/build*/
+/源码/build*/
+debug/
+release/
+*.app/
+*.dSYM/
+Makefile*
+.qmake.stash
+.qmake.cache
+qrc_*.cpp
+moc_*.cpp
+moc_*.h
+ui_*.h
+*.o
+*.obj
+*.exe
+*.res
+*.pdb
+*.ilk
+*.idb
+*.exp
+*.lib
+Info.plist

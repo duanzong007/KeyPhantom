@@ -29,24 +29,6 @@ void KeySenderThread::run()
     int cnt = 0;
     for (QChar ch : text_)
     {
-
-#ifdef Q_OS_WIN
-        if (stop_.load()) { emit finished(true); return; }
-
-        if (ch == u'\n' || ch == u'\r') {
-            sendVk(VK_RETURN);
-        }
-        else if (ch == u'\t') {
-            sendVk(VK_TAB);
-        }
-        else {
-            sendUnicode(ch);
-        }
-        msleep(charInt);
-        if (++cnt >= batch) { cnt = 0; msleep(batchInt); }
-#endif
-
-#ifdef Q_OS_MAC
         if (stop_.load()) { emit finished(true); return; }
 
         if (ch == u'\n' || ch == u'\r') {
@@ -59,8 +41,6 @@ void KeySenderThread::run()
 
         QThread::msleep(charInt);
         if (++cnt >= batch) { cnt = 0; QThread::msleep(batchInt); }
-#endif
-
     }
 
     emit finished(false);
@@ -91,6 +71,9 @@ void KeySenderThread::sendVk(unsigned short vk)
 
     SendInput(2, ip, sizeof(INPUT));
 }
+
+void KeySenderThread::sendEnter() { sendVk(VK_RETURN); }
+void KeySenderThread::sendTab()   { sendVk(VK_TAB);    }
 
 #endif
 
@@ -135,8 +118,6 @@ void KeySenderThread::sendTab()   { sendKeycode(kVK_Tab);    }
 
 #endif
 
-
-
 /* =================================================================== */
 /*                            MainWindow                                */
 /* =================================================================== */
@@ -160,9 +141,7 @@ MainWindow::MainWindow(QWidget *parent)
             this->activateWindow();
         }
     });
-    
 #endif
-
 
     ui->comboBox->addItems({u8"慢速", u8"正常", u8"快速", u8"超高速"});
     ui->comboBox->setCurrentIndex(1);
@@ -231,9 +210,6 @@ KeySenderThread::Speed MainWindow::currentSpeed() const
 
 #ifdef Q_OS_MAC
 
-#include <QMessageBox>
-#include <ApplicationServices/ApplicationServices.h>
-
 bool MainWindow::checkMacPermissions()
 {
     // 检查辅助功能权限
@@ -249,5 +225,3 @@ bool MainWindow::checkMacPermissions()
 }
 
 #endif
-
-

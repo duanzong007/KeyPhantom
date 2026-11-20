@@ -6,10 +6,6 @@
 #include <QTimer>
 #include <atomic>
 
-#ifdef Q_OS_MAC
-#include <ApplicationServices/ApplicationServices.h>
-#endif
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -35,10 +31,10 @@ protected:
 
 private:
     void sendUnicode(QChar ch);
-
-#ifdef Q_OS_MAC
     void sendEnter();
     void sendTab();
+
+#ifdef Q_OS_MAC
     void sendKeycode(uint16_t kc);
 #endif
 
