@@ -5,10 +5,18 @@
 *.pro.user*
 *.pro.shared*
 .qtcreator/
+CMakeLists.txt.user*
 
 # Build directories and generated files
 /build*/
-/源码/build*/
+/cmake-build*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+Testing/
+compile_commands.json
 debug/
 release/
 *.app/

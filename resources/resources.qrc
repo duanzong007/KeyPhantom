@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="keyphantom_logo.icns">icons/keyphantom_logo.icns</file>
+        <file alias="keyphantom_logo.ico">icons/keyphantom_logo.ico</file>
+    </qresource>
+</RCC>

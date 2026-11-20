@@ -26,31 +26,43 @@ macOS 需要在“系统设置 → 隐私与安全性 → 辅助功能”中授�
 
 ```text
 KeyPhantom/
+├── CMakeLists.txt            # Qt 6 / CMake 构建入口
 ├── README.md
-└── 源码/
-    ├── zhantie.pro       # qmake 项目配置
-    ├── main.cpp          # 程序入口
-    ├── mainwindow.h      # 主窗口和发送线程声明
-    ├── mainwindow.cpp    # 共用输入流程及 Windows/macOS 平台实现
-    ├── mainwindow.ui     # Qt Designer 界面
-    ├── logo.qrc          # 图标资源配置
-    ├── keyphantom_logo.icns
-    └── keyphantom_logo.ico
+├── cmake/
+│   └── KeyPhantom.rc.in      # Windows 应用图标配置
+├── src/
+│   ├── main.cpp             # 程序入口
+│   ├── mainwindow.h         # 主窗口和发送线程声明
+│   └── mainwindow.cpp       # 输入流程与平台实现
+├── ui/
+│   └── mainwindow.ui        # Qt Designer 界面
+└── resources/
+    ├── resources.qrc        # Qt 资源配置
+    └── icons/
+        ├── keyphantom_logo.icns
+        └── keyphantom_logo.ico
 ```
 
-原 Mac 专版与双平台版已合并，后续统一维护 `源码/`。Windows 使用 `SendInput`，macOS 使用 `CGEvent`。
+Windows 和 macOS 共用一套源码。Windows 使用 `SendInput`，macOS 使用 `CGEvent`。生成文件统一放在 `build/` 等独立构建目录中。
 
 ## 构建
 
-安装支持 C++17 的编译器及包含 Qt Widgets 的 Qt 开发环境。可在 Qt Creator 中打开 `源码/zhantie.pro`，选择对应平台的 Qt Kit 后构建。
+需要 CMake 3.21 或更新版本、Qt 6.2 或更新版本（含 Qt Widgets），以及支持 C++17 的编译器。Windows 编译器需与 Qt Kit 匹配。
 
-也可以在已配置 Qt 的终端中，从仓库根目录执行：
+在 Qt Creator 中打开仓库根目录的 `CMakeLists.txt`，选择对应平台的 Qt Kit 后构建；也可以从仓库根目录执行：
 
 ```sh
-mkdir -p build
-cd build
-qmake ../源码/zhantie.pro
-make -j4
+cmake -S . -B build/macos -DCMAKE_PREFIX_PATH="/path/to/Qt/6.x.x/macos" -DCMAKE_BUILD_TYPE=Release
+cmake --build build/macos --parallel
 ```
 
-以上命令适用于 macOS；Windows 根据所选 Kit 使用 `mingw32-make` 或 `nmake`。Windows 配置自动链接 `user32`，macOS 配置自动链接 ApplicationServices 和 Carbon 框架。
+macOS 的程序生成在 `build/macos/KeyPhantom.app`。Windows 将 Qt 路径替换为所选 Kit 的安装目录，并使用独立构建目录，例如：
+
+```powershell
+cmake -S . -B build/windows -DCMAKE_PREFIX_PATH="C:/Qt/6.x.x/msvc2022_64"
+cmake --build build/windows --config Release --parallel
+```
+
+Windows 配置自动链接 `user32`，macOS 配置自动链接 ApplicationServices 和 Carbon 框架，并设置应用图标。
+
+如果使用 Qt 6.9.2 与较新的 Apple Clang，在 Apple Silicon 上遇到 Qt 头文件中 `__yield` 未声明的错误，可在 CMake 配置命令中额外传入 `-DCMAKE_CXX_FLAGS="-include arm_acle.h"`。这是该工具链组合的本地兼容参数。
