@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.21.1)
+
+if(CMAKE_HOST_APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0" CACHE STRING "Minimum supported macOS version" FORCE)
+endif()
 
 project(KeyPhantom VERSION 1.2.0 LANGUAGES CXX)
 
@@ -38,6 +42,7 @@ qt_add_executable(KeyPhantom
 )
 
 target_link_libraries(KeyPhantom PRIVATE Qt6::Widgets)
+target_compile_definitions(KeyPhantom PRIVATE KEYPHANTOM_VERSION="${PROJECT_VERSION}")
 
 set_target_properties(KeyPhantom PROPERTIES
     WIN32_EXECUTABLE TRUE
@@ -62,8 +67,11 @@ elseif(APPLE)
     target_sources(KeyPhantom PRIVATE "${MACOS_ICON}")
     set_source_files_properties("${MACOS_ICON}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set_target_properties(KeyPhantom PROPERTIES
+        OUTPUT_NAME "键影"
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.duanzong.KeyPhantom
         MACOSX_BUNDLE_ICON_FILE keyphantom_logo.icns
-        MACOSX_BUNDLE_BUNDLE_NAME KeyPhantom
+        MACOSX_BUNDLE_BUNDLE_NAME "键影"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
     )

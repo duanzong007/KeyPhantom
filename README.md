@@ -1,31 +1,63 @@
 # 键影 KeyPhantom
 
-基于 C++17 和 Qt Widgets 的模拟键盘输入工具，使用同一套源码支持 Windows 和 macOS。将文本填入窗口后，程序通过系统键盘事件逐字输入到目标应用。
+**v1.2.0 · Windows / macOS**
 
-## 使用
+把一段文字逐字输入到目标应用。键影通过系统键盘事件发送文本，提供可取消的倒计时、暂停继续和全局停止，让长文本输入更容易控制。
 
-1. 在首页文本框中输入或粘贴内容。首页保持简洁，只保留文本框、简要统计与当前操作按钮。
-2. 点击右上角“设置”，在独立设置页调整速度、倒计时（1–30 秒）、换行、Tab、完成提醒与权限，然后返回首页。
-3. 点击“开始输入”，在倒计时内切换到目标应用并聚焦输入框。倒计时可随时取消；若结束时仍停留在键影，程序不会开始发送。
-4. 返回键影时自动暂停，输入中主按钮变为“暂停输入”。点击“继续输入”会重新倒计时，再切回目标窗口继续。
-5. 在任意应用中按 **Ctrl + Alt + Q** 停止输入（macOS 为 **⌃ Control + ⌥ Option + Q**）；也可使用窗口中的“停止”。在键影窗口内按 Esc 同样可以取消或停止。
+[下载发布版本](https://github.com/duanzong007/KeyPhantom/releases) · [v1.2.0 更新内容](CHANGELOG.md) · [构建与打包](docs/building.md)
 
-快捷键提示会按系统显示对应键名，macOS 无需使用功能键或 Fn。快捷键注册失败时，窗口会明确显示不可用。
+## 下载与安装
 
-输入进度以完整 Unicode 字素（例如一个 Emoji）计数，CRLF 和 CR 会统一为单个换行；Tab 转为空格时，展开后的空格分别计数。进度表示已向系统发送的内容，不代表目标应用已接收。
+| 平台 | 发布包 | 使用方式 |
+| --- | --- | --- |
+| macOS · Apple Silicon（M 系列） | `KeyPhantom-1.2.0-macos-arm64.dmg` | 打开镜像，将 **键影.app** 拖入 Applications |
+| macOS · Intel（x64） | `KeyPhantom-1.2.0-macos-x64.dmg` | 打开镜像，将 **键影.app** 拖入 Applications |
+| Windows · 32 位（x86） | `KeyPhantom-1.2.0-windows-x86.zip` | 完整解压后运行 `KeyPhantom.exe` |
+| Windows · 64 位（x64，Intel / AMD） | `KeyPhantom-1.2.0-windows-x64.zip` | 完整解压后运行 `KeyPhantom.exe` |
 
-### 输入策略与权限
+Mac 版支持 **macOS 12.0 及以上**，按芯片提供 **Apple Silicon（arm64）** 和 **Intel（x64）** 两种安装包。Windows 提供 **32 位（x86）和 64 位（x64）** 两种包，目标系统为 **Windows 10 / 11**。32 位 Windows 选择 x86，常规 64 位 Windows 选择 x64；不提供 Windows ARM 专用包。
 
-- 换行可选择 **Enter** 或 **Shift+Enter**。Enter 在某些应用中会提交消息，请按目标应用选择。
-- Tab 可选择发送 **Tab 按键** 或替换为 **1–8 个空格**。Tab 按键可能使焦点切换到其他控件。
-- macOS 必须在“系统设置 → 隐私与安全性 → 辅助功能”中授权应用。缺少权限时无法开始，设置页提供授权入口；运行中检测到权限撤销会停止并显示原因。
-- Windows 检查系统的 `SendInput` 返回值；系统拒绝或只接受部分事件时会停止并报告错误。向高于本程序权限级别的应用输入可能被系统阻止。
-- 完成、停止和错误均在窗口中提示，不弹出完成对话框。可勾选“完成时提醒”，通过 Dock 或任务栏提醒完成。
-- 自动记住速度、倒计时、输入策略、提醒偏好及窗口位置；不会保存输入文本。
+发布包应包含 Qt 运行依赖，使用者不需要安装 Qt。Windows 包请完整解压并保留附带的文件夹和 DLL，不要只复制单独的 EXE。
 
-程序继续使用 Unicode 键盘事件。部分游戏、串流客户端（包括 Moonlight 的普通键盘转发）和自定义输入控件可能忽略事件中的文本；这些场景需要单独适配。
+当前 Mac 包使用本地签名，尚未经过 Apple 公证。首次打开可能出现开发者验证提示，请确认下载来源后按系统提示允许打开。
 
-## 输入速度
+## 开始使用
+
+1. 在首页文本框中输入或粘贴内容。
+2. 如需调整速度、倒计时、换行或 Tab，点击右上角的 **设置**。设置会自动保存。
+3. 点击 **开始输入**，在倒计时结束前切换到目标应用，并点进需要输入的位置。
+4. 输入中可暂停；返回键影时也会自动暂停。点击 **继续输入** 会重新倒计时，方便切回目标窗口。
+5. 需要中止时，使用全局停止快捷键，或点击窗口中的 **停止**。
+
+首页保持简洁：一个文本框和随任务状态切换的主按钮；进度条、暂停和停止控制在需要时出现。若倒计时结束时仍停留在键影，程序会取消本次开始操作。
+
+### 全局停止快捷键
+
+| 系统 | 快捷键 |
+| --- | --- |
+| macOS | **⌃ Control + ⌥ Option + Q** |
+| Windows | **Ctrl + Alt + Q** |
+
+在键影窗口内按 **Esc** 也可取消或停止。若全局快捷键被占用或注册失败，设置页会显示不可用，任务开始时也会提示。
+
+### macOS 辅助功能权限
+
+首次使用时，打开 **设置 → 开启辅助功能**，在系统的 **隐私与安全性 → 辅助功能** 中允许“键影”控制电脑。旧版系统中对应入口可能名为“安全性与隐私”。
+
+缺少权限时无法开始输入；运行中检测到权限被撤销会停止并显示原因。更新应用或移动安装位置后，如果输入失效，请检查系统授权列表中的应用是否为当前安装的“键影”。
+
+## 功能与设置
+
+- **倒计时**：1–30 秒，可实时查看并取消。
+- **进度与控制**：显示已发送字符数和预计剩余时间，支持暂停、继续与全局停止。
+- **Unicode 文本**：按完整字素处理中文、Emoji、组合字符及部分生僻字，避免拆开 UTF-16 代理对；CRLF / CR 统一为单个换行。
+- **换行方式**：选择 Enter 或 Shift+Enter。
+- **Tab 处理**：发送 Tab 按键，或转换为 1–8 个空格。
+- **完成提醒**：默认在窗口内显示结果，可选 Dock / 任务栏提醒，不弹出完成对话框。
+- **偏好保存**：记住速度、倒计时、输入策略、提醒设置及窗口位置；不会保存输入文本。
+- **异常提示**：检查 macOS 权限、键盘事件创建和 Windows `SendInput` 返回值，发送失败时停止并显示原因。
+
+### 四档输入速度
 
 | 模式 | 每批字符数 | 字符间隔 | 批次间隔 |
 | --- | ---: | ---: | ---: |
@@ -34,59 +66,30 @@
 | 快速 | 20 | 2 ms | 20 ms |
 | 超高速 | 50 | 0 ms | 10 ms |
 
-字符间隔与批次间隔会累加。不同应用对模拟输入的支持不同，请按实际效果选择速度。
+字符间隔和批次间隔会累加。预计时间按当前策略估算，实际速度取决于系统与目标应用。
 
-## 项目结构
+## 输入前需要了解
+
+- 内容会发送到 **当前获得焦点的窗口**。切换到其他应用后，后续输入可能进入新的窗口。
+- Enter 在部分应用中会提交消息，Tab 可能切换焦点；请按目标应用选择输入策略。
+- 进度表示已经向系统发送的字符，不代表目标应用全部接收；完成后请确认实际结果。Tab 转为空格时，展开后的空格分别计数。
+- Windows 可能阻止向权限级别更高的程序输入，遇到错误时请检查双方的权限级别。
+- 部分游戏、串流客户端和自定义输入控件会忽略 Unicode 键盘事件中的文本。
+
+## 开发
+
+项目使用 **C++17、Qt 6 Widgets 和 CMake**，Windows 与 macOS 共用一套源码。
 
 ```text
 KeyPhantom/
-├── CMakeLists.txt
-├── cmake/                    # 平台构建配置
-├── src/
-│   ├── main.cpp              # 程序入口
-│   ├── mainwindow.*          # 窗口、倒计时与设置
-│   ├── appearance.*          # 应用主题
-│   ├── inputplan.*           # Unicode 分段、换行和 Tab 处理
-│   ├── keysenderthread.*     # 可暂停、可中止的发送线程
-│   ├── platforminput.*       # Windows/macOS 键盘接口
-│   └── globalstophotkey.*    # 系统级停止快捷键
-├── ui/mainwindow.ui          # Qt Designer 界面
-├── resources/                # 样式、资源配置与图标
-└── tests/                    # 输入逻辑及窗口回归测试
+├── CMakeLists.txt        # 构建入口与版本号
+├── CHANGELOG.md          # 更新记录
+├── cmake/               # 应用元数据和平台资源配置
+├── docs/                # 构建、打包与 Release 说明
+├── src/                 # 窗口、输入线程和系统接口
+├── ui/                  # Qt Designer 界面
+├── resources/           # 样式及图标
+└── tests/               # 输入逻辑与窗口回归测试
 ```
 
-Windows 和 macOS 共用一套源码。Windows 使用 `SendInput`，macOS 使用 `CGEvent`。生成文件统一放在 `build/` 等独立构建目录中。
-
-## 构建
-
-需要 CMake 3.21 或更新版本、Qt 6.2 或更新版本（含 Qt Widgets），以及支持 C++17 的编译器。Windows 编译器需与 Qt Kit 匹配。
-
-在 Qt Creator 中打开仓库根目录的 `CMakeLists.txt`，选择对应平台的 Qt Kit 后构建；也可以从仓库根目录执行：
-
-```sh
-cmake -S . -B build/macos -DCMAKE_PREFIX_PATH="/path/to/Qt/6.x.x/macos" -DCMAKE_BUILD_TYPE=Release
-cmake --build build/macos --parallel
-```
-
-macOS 的程序生成在 `build/macos/KeyPhantom.app`。Windows 将 Qt 路径替换为所选 Kit 的安装目录，并使用独立构建目录，例如：
-
-```powershell
-cmake -S . -B build/windows -DCMAKE_PREFIX_PATH="C:/Qt/6.x.x/msvc2022_64"
-cmake --build build/windows --config Release --parallel
-```
-
-Windows 配置自动链接 `user32`，macOS 配置自动链接 ApplicationServices 和 Carbon 框架，并设置应用图标。
-
-如果使用 Qt 6.9.2 与较新的 Apple Clang，在 Apple Silicon 上遇到 Qt 头文件中 `__yield` 未声明的错误，可在 CMake 配置命令中额外传入 `-DCMAKE_CXX_FLAGS="-include arm_acle.h"`。这是该工具链组合的本地兼容参数。
-
-## 验证
-
-启用回归测试后构建并运行：
-
-```sh
-cmake -S . -B build/macos -DKEYPHANTOM_BUILD_TESTS=ON
-cmake --build build/macos --parallel
-ctest --test-dir build/macos --output-on-failure
-```
-
-首次配置仍需提供 Qt 安装路径，以及本机需要的工具链兼容参数。测试覆盖 Unicode/Emoji、换行归一化、Tab 转换、进度、暂停继续、停止、错误与权限分支，以及倒计时取消和偏好保存。发送测试使用替代后端，不会向其他应用输入内容。窗口测试使用离屏渲染。
+Qt Creator 可直接打开根目录的 `CMakeLists.txt`。完整构建命令、Qt 依赖部署和测试方式见 [构建与打包](docs/building.md)。
