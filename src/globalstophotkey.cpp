@@ -27,7 +27,7 @@ GlobalStopHotkey::GlobalStopHotkey(QObject *parent)
     : QObject(parent), native_(std::make_unique<Native>())
 {
 #ifdef Q_OS_WIN
-    native_->registered = RegisterHotKey(nullptr, HotkeyId, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, VK_F8);
+    native_->registered = RegisterHotKey(nullptr, HotkeyId, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, 'Q');
     if (native_->registered)
         QCoreApplication::instance()->installNativeEventFilter(this);
 #elif defined(Q_OS_MACOS)
@@ -45,7 +45,7 @@ GlobalStopHotkey::GlobalStopHotkey(QObject *parent)
         }, 1, &eventType, this, &native_->handler);
     if (handlerStatus == noErr) {
         const EventHotKeyID id = {0x4B50484D, HotkeyId};
-        native_->registered = RegisterEventHotKey(kVK_F8, controlKey | optionKey, id,
+        native_->registered = RegisterEventHotKey(kVK_ANSI_Q, controlKey | optionKey, id,
                                                   GetApplicationEventTarget(), 0, &native_->hotkey) == noErr;
     }
 #endif
@@ -69,6 +69,15 @@ GlobalStopHotkey::~GlobalStopHotkey()
 bool GlobalStopHotkey::isRegistered() const
 {
     return native_->registered;
+}
+
+QString GlobalStopHotkey::shortcutText()
+{
+#ifdef Q_OS_MACOS
+    return QStringLiteral("⌃ Control + ⌥ Option + Q");
+#else
+    return QStringLiteral("Ctrl + Alt + Q");
+#endif
 }
 
 bool GlobalStopHotkey::nativeEventFilter(const QByteArray &type, void *message, qintptr *result)

@@ -2,6 +2,7 @@
 
 #include <QAbstractNativeEventFilter>
 #include <QObject>
+#include <QString>
 #include <memory>
 
 class GlobalStopHotkey : public QObject, private QAbstractNativeEventFilter
@@ -11,6 +12,7 @@ public:
     explicit GlobalStopHotkey(QObject *parent = nullptr);
     ~GlobalStopHotkey() override;
     bool isRegistered() const;
+    static QString shortcutText();
 
 signals:
     void activated();

@@ -79,7 +79,7 @@
           <item><layout class="QVBoxLayout" name="reminderLayout"><property name="spacing"><number>12</number></property>
            <item><widget class="QLabel" name="reminderHeading"><property name="text"><string>提醒与快捷键</string></property></widget></item>
            <item><widget class="QCheckBox" name="notifyCheck"><property name="text"><string>输入完成时提醒我</string></property><property name="toolTip"><string>完成后提醒 Dock 或任务栏，不弹出对话框。</string></property></widget></item>
-           <item><widget class="QLabel" name="hotkeyLabel"><property name="text"><string>全局停止：Ctrl + Alt + F8</string></property></widget></item>
+           <item><widget class="QLabel" name="hotkeyLabel"><property name="text"><string>全局停止快捷键</string></property></widget></item>
           </layout></item>
           <item><widget class="QFrame" name="permissionSeparator"><property name="frameShape"><enum>QFrame::HLine</enum></property></widget></item>
           <item><layout class="QVBoxLayout" name="permissionLayout"><property name="spacing"><number>12</number></property>

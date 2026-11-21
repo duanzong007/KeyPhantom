@@ -24,8 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->textEdit->setTabStopDistance(ui->textEdit->fontMetrics().horizontalAdvance(u' ') * 4);
     ui->textEdit->setAccessibleName(tr("待输入的文本"));
     ui->progressBar->setAccessibleName(tr("发送进度"));
-    ui->stopButton->setToolTip(tr("全局停止：Ctrl + Alt + F8（Mac 使用 Control + Option + F8）"));
-    ui->hotkeyLabel->setToolTip(tr("在任何应用中按下即可停止。Mac 如将 F8 用作媒体键，需同时按 Fn。"));
+    ui->stopButton->setToolTip(tr("全局停止：%1").arg(GlobalStopHotkey::shortcutText()));
+    ui->hotkeyLabel->setText(tr("全局停止：%1").arg(GlobalStopHotkey::shortcutText()));
+    ui->hotkeyLabel->setToolTip(tr("在任何应用中按下这组快捷键即可停止输入。"));
     if (!stopHotkey_.isRegistered()) {
         ui->hotkeyLabel->setText(tr("全局停止不可用 · 请检查快捷键冲突"));
         ui->hotkeyLabel->setProperty("warning", true);
@@ -299,7 +300,7 @@ void MainWindow::beginCountdown(bool resume)
     countdownClock_.start();
     setState(Countdown);
     setMessage(stopHotkey_.isRegistered()
-        ? tr("请切换到目标输入框。Ctrl + Alt + F8 可随时停止。")
+        ? tr("请切换到目标输入框。%1 可随时停止。").arg(GlobalStopHotkey::shortcutText())
         : tr("请切换到目标输入框。全局快捷键不可用，返回键影可暂停或停止。"), !stopHotkey_.isRegistered());
     countdownTimer_.start();
     tickCountdown();
@@ -329,7 +330,7 @@ void MainWindow::tickCountdown()
     }
     setState(Sending);
     ui->stateLabel->setText(tr("正在输入"));
-    setMessage(stopHotkey_.isRegistered() ? tr("Ctrl + Alt + F8 停止 · 返回键影会自动暂停")
+    setMessage(stopHotkey_.isRegistered() ? tr("%1 停止 · 返回键影会自动暂停").arg(GlobalStopHotkey::shortcutText())
                                            : tr("全局快捷键不可用 · 返回键影可暂停或停止"));
     if (resuming_)
         sender_.setPaused(false);
